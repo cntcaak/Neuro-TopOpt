@@ -1,12 +1,7 @@
-# Ignore Data (Too large for GitHub)
 data/
 __pycache__/
 *.pyc
-
-# Ignore System Files
 .DS_Store
 .vscode/
-
-# Ignore Virtual Env
 venv/
 env/

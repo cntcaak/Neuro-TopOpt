@@ -5,18 +5,28 @@ from PIL import Image
 
 
 def create_3d_voxel_plot(binary_grid, thickness=5):
-    """Optimized 3D Voxel Plotter"""
+    """
+    Converts a 2D binary grid into an interactive 3D Voxel Mesh.
+    Optimized: Uses a 'step' to reduce resolution for speed.
+    """
     rows, cols = binary_grid.shape
-    step = 2 if (rows > 50 or cols > 50) else 1
+
+    # OPTIMIZATION: If grid is large, skip every 2nd pixel to save memory
+    step = 1
+    if rows > 50 or cols > 50:
+        step = 2
 
     x_verts = []
     y_verts = []
     z_verts = []
+
     i_indices = []
     j_indices = []
     k_indices = []
+
     vertex_count = 0
 
+    # Iterate through the grid
     for r in range(0, rows, step):
         for c in range(0, cols, step):
             if binary_grid[r, c] > 0.5:
@@ -31,12 +41,14 @@ def create_3d_voxel_plot(binary_grid, thickness=5):
                     0, 1, 5,   0, 5, 4,  2, 3, 7,   2, 7, 6,
                     0, 4, 7,   0, 7, 3,  1, 2, 6,   1, 6, 5
                 ]
+
                 i_indices.extend(
                     [idx + vertex_count for idx in cube_indices[0::3]])
                 j_indices.extend(
                     [idx + vertex_count for idx in cube_indices[1::3]])
                 k_indices.extend(
                     [idx + vertex_count for idx in cube_indices[2::3]])
+
                 vertex_count += 8
 
     fig = go.Figure(data=[
@@ -52,8 +64,15 @@ def create_3d_voxel_plot(binary_grid, thickness=5):
     return fig
 
 
+def animate_topology_evolution(binary_grid):
+    frames = []
+    fig = create_3d_voxel_plot(binary_grid)
+    frames.append(fig)
+    return frames
+
+
 def generate_ar_qrcode(url="https://neuro-topopt-aak.streamlit.app/"):
-    """Generates QR code for live app URL"""
+    """Generates a reliable QR Code image."""
     qr = qrcode.QRCode(version=1, box_size=10, border=4)
     qr.add_data(url)
     qr.make(fit=True)

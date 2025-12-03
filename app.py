@@ -111,7 +111,7 @@ with t1:
         st.pyplot(fig2)
         plt.close(fig2)
 
-# TAB 2: AI EXPLAINABILITY (UPGRADED)
+# TAB 2: AI EXPLAINABILITY (The Upgrade)
 with t2:
     st.subheader("🧠 Transparency Engine")
 
@@ -125,8 +125,7 @@ with t2:
     m1.metric("Model Uncertainty", "Low (<2%)", delta="Stable")
     m2.metric("Dominant Force", "Bending Moment" if load_x >
               30 else "Shear Force")
-    m3.metric("Feature Activation", "98.5%",
-              help="Percentage of active neurons")
+    m3.metric("Feature Activation", "98.5%", help="Active Neurons")
     st.divider()
 
     c_viz, c_text = st.columns([1.5, 1])
@@ -135,17 +134,15 @@ with t2:
         st.markdown("#### 🗺️ Attention Heatmap")
         fig, ax = plt.subplots(figsize=(8, 4))
         im = ax.imshow(smooth_pred, cmap='magma', vmin=0, vmax=1)
-        # Context Overlay
         ax.arrow(load_x, load_y - 3, 0, 2, head_width=2,
                  head_length=1, fc='cyan', ec='cyan', zorder=10)
-        ax.scatter([load_x], [load_y], c='cyan', s=60, zorder=10,
-                   edgecolors='white', label="Load Context")
-        wall = plt.Rectangle((-1.5, -0.5), 2.5, 20.5, color='cyan',
-                             alpha=0.3, hatch='///', label="Support Context")
+        ax.scatter([load_x], [load_y], c='cyan', s=60,
+                   zorder=10, edgecolors='white')
+        wall = plt.Rectangle((-1.5, -0.5), 2.5, 20.5,
+                             color='cyan', alpha=0.3, hatch='///')
         ax.add_patch(wall)
         plt.colorbar(im, ax=ax, label="Activation Strength")
         ax.axis('off')
-        ax.legend(loc='lower right')
         st.pyplot(fig)
         plt.close(fig)
 
@@ -191,7 +188,7 @@ with t3:
             else:
                 st.error("Simulation Failed")
 
-# TAB 4: 3D VIEWER
+# TAB 4: 3D VIEWER (With QR Link)
 with t4:
     c1, c2 = st.columns([3, 1])
     with c1:
@@ -202,17 +199,14 @@ with t4:
     with c2:
         st.subheader("📱 AR Preview")
         try:
-            # Generate QR
             live_url = "https://neuro-topopt-aak.streamlit.app/"
             qr_img = visualization.generate_ar_qrcode(live_url)
-            st.image(qr_img.convert("RGB"),
-                     caption="Scan to Open on Mobile", use_container_width=True)
-
-            # Add a clickable link as backup
-            st.markdown(f"[🔗 Click here to open on Mobile]({live_url})")
-        except Exception as e:
-            st.warning("QR Code Error.")
-            st.error(f"Details: {e}")
+            st.image(qr_img.convert("RGB"), caption="Scan to Open",
+                     use_container_width=True)
+            # THE FIX: Add a clickable link as fallback
+            st.markdown(f"[🔗 Open Mobile App]({live_url})")
+        except:
+            st.warning("Install 'qrcode'")
 
 # TAB 5: REPORT
 with t5:

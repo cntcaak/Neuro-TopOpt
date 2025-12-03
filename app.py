@@ -202,12 +202,17 @@ with t4:
     with c2:
         st.subheader("📱 AR Preview")
         try:
-            qr_img = visualization.generate_ar_qrcode(
-                "https://neuro-topopt-aak.streamlit.app/")
+            # Generate QR
+            live_url = "https://neuro-topopt-aak.streamlit.app/"
+            qr_img = visualization.generate_ar_qrcode(live_url)
             st.image(qr_img.convert("RGB"),
-                     caption="Scan for Mobile View", use_container_width=True)
-        except:
-            st.warning("Install 'qrcode'")
+                     caption="Scan to Open on Mobile", use_container_width=True)
+
+            # Add a clickable link as backup
+            st.markdown(f"[🔗 Click here to open on Mobile]({live_url})")
+        except Exception as e:
+            st.warning("QR Code Error.")
+            st.error(f"Details: {e}")
 
 # TAB 5: REPORT
 with t5:
